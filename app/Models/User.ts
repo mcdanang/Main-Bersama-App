@@ -59,6 +59,9 @@ export default class User extends BaseModel {
   @column()
   public role: string
 
+  @column()
+  public isVerified: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

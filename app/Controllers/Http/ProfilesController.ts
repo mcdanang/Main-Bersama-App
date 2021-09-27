@@ -1,6 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
-import Profile from 'App/Models/Profile'
 
 export default class ProfilesController {
     /**
@@ -45,18 +44,23 @@ export default class ProfilesController {
 
         const authUser = auth.user
 
-        const checkId = await Database.from('profiles').where('user_id', auth.user.id).select('user_id')
-        console.log(checkId)
+        if (auth && auth.user) {
 
-        if(checkId.length > 0) {
-            return response.badRequest({message: 'profile sudah ada'})
+            const checkId = await Database.from('profiles').where('user_id', auth.user.id).select('user_id')
+            console.log(checkId)
+    
+            if(checkId.length > 0) {
+                return response.badRequest({message: 'profile sudah ada'})
+            }
+            
+            authUser?.related('profile').create({
+                fullName: full_name,
+                phone: phone
+            })
+    
+            return response.created({message: 'Profile is created!'})
         }
-        
-        authUser?.related('profile').create({
-            fullName: full_name,
-            phone: phone
-        })
 
-        return response.created({message: 'Profile is created!'})
+        return response.unauthorized
     }
 }

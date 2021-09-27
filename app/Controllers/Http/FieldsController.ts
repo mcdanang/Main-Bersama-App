@@ -1,11 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import{ FieldValidator } from 'App/Validators/venueValidator'
-import Database from '@ioc:Adonis/Lucid/Database'
 
 //models
 import Field from 'App/Models/Field'
-import Venue from 'App/Models/Venue'
-import Booking from 'App/Models/Booking'
 
 export default class FieldsController {
     /**

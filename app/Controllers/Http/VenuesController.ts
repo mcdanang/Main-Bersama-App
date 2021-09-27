@@ -1,10 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import{ CreateVenueValidator, BookValidator } from 'App/Validators/VenueValidator'
+import{ CreateVenueValidator } from 'App/Validators/VenueValidator'
 //import Database from '@ioc:Adonis/Lucid/Database'
 
 //models
 import Venue from 'App/Models/Venue'
-import User from 'App/Models/User'
 
 export default class VenuesController {
     /**
