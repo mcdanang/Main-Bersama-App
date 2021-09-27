@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import{ FieldValidator } from 'App/Validators/venueValidator'
+import{ FieldValidator } from 'App/Validators/VenueValidator'
 
 //models
 import Field from 'App/Models/Field'

@@ -6,7 +6,6 @@ import{ BookValidator } from 'App/Validators/VenueValidator'
 // import Venue from 'App/Models/Venue'
 import User from 'App/Models/User'
 import Booking from 'App/Models/Booking'
-import { DateTime } from 'luxon';
 import Database from '@ioc:Adonis/Lucid/Database';
 
 interface UserInterface {
@@ -203,7 +202,7 @@ export default class BookingsController {
      *          401:
      *              description: Unauthorized
      */
-    public async update({ params, response, request, auth}: HttpContextContract) {
+    public async update({ params, response, auth}: HttpContextContract) {
         // let booking = await Booking.findOrFail(params.id)
         
         // // const booking = await Booking.query().preload('users').where('id', params.id).first()
@@ -253,7 +252,7 @@ export default class BookingsController {
      *          401:
      *              description: Unauthorized
      */
-     public async unjoin({ params, response, request, auth}: HttpContextContract) {
+     public async unjoin({ params, response, auth}: HttpContextContract) {
         
         const user = await User.find(auth.user?.id)
         const booking = await Booking.find(params.id)
@@ -285,16 +284,18 @@ export default class BookingsController {
      *              description: Not Found
      */
     public async schedules({auth, response}: HttpContextContract) {
-        if(auth.user.id == undefined) {
+        if(auth && auth.user) {
+            const booking = await Database
+            .from('bookings')
+            .join('booking_user', 'bookings.id', '=', 'booking_user.booking_id')
+            .select('bookings.*')
+            .where('booking_user.user_id', auth.user.id)
+            // from('booking_user').where('user_id', auth.user.id)
+    
+            return response.ok({ message: 'berhasil get data booking by user yang sedang melakukan login', data: booking })
 
         }
-        const booking = await Database
-        .from('bookings')
-        .join('booking_user', 'bookings.id', '=', 'booking_user.booking_id')
-        .select('bookings.*')
-        .where('booking_user.user_id', auth.user.id)
-        // from('booking_user').where('user_id', auth.user.id)
 
-        return response.ok({ message: 'berhasil get data booking by user yang sedang melakukan login', data: booking })
+        return response.unauthorized
     }
 }
